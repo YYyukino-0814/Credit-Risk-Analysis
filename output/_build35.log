@@ -1,0 +1,351 @@
+[17:24:47] 阶段0 解压：找到 16 个 zip
+[17:24:47]   待入库 csv：16 个
+[17:24:47] 阶段1 跳过（loans_raw.parquet 已存在，且源文件清单与当前 16 个文件一致）
+[17:24:47] 阶段2 体检
+[17:24:47]   列数 145，行数 2,260,668
+
+===== 全部列名 =====
+  id                            member_id                     loan_amnt                     funded_amnt                   funded_amnt_inv               term                        
+  int_rate                      installment                   grade                         sub_grade                     emp_title                     emp_length                  
+  home_ownership                annual_inc                    verification_status           issue_d                       loan_status                   pymnt_plan                  
+  url                           desc                          purpose                       title                         zip_code                      addr_state                  
+  dti                           delinq_2yrs                   earliest_cr_line              inq_last_6mths                mths_since_last_delinq        mths_since_last_record      
+  open_acc                      pub_rec                       revol_bal                     revol_util                    total_acc                     initial_list_status         
+  out_prncp                     out_prncp_inv                 total_pymnt                   total_pymnt_inv               total_rec_prncp               total_rec_int               
+  total_rec_late_fee            recoveries                    collection_recovery_fee       last_pymnt_d                  last_pymnt_amnt               next_pymnt_d                
+  last_credit_pull_d            collections_12_mths_ex_med    mths_since_last_major_derog   policy_code                   application_type              annual_inc_joint            
+  dti_joint                     verification_status_joint     acc_now_delinq                tot_coll_amt                  tot_cur_bal                   open_acc_6m                 
+  open_act_il                   open_il_12m                   open_il_24m                   mths_since_rcnt_il            total_bal_il                  il_util                     
+  open_rv_12m                   open_rv_24m                   max_bal_bc                    all_util                      total_rev_hi_lim              inq_fi                      
+  total_cu_tl                   inq_last_12m                  acc_open_past_24mths          avg_cur_bal                   bc_open_to_buy                bc_util                     
+  chargeoff_within_12_mths      delinq_amnt                   mo_sin_old_il_acct            mo_sin_old_rev_tl_op          mo_sin_rcnt_rev_tl_op         mo_sin_rcnt_tl              
+  mort_acc                      mths_since_recent_bc          mths_since_recent_bc_dlq      mths_since_recent_inq         mths_since_recent_revol_delinq  num_accts_ever_120_pd       
+  num_actv_bc_tl                num_actv_rev_tl               num_bc_sats                   num_bc_tl                     num_il_tl                     num_op_rev_tl               
+  num_rev_accts                 num_rev_tl_bal_gt_0           num_sats                      num_tl_120dpd_2m              num_tl_30dpd                  num_tl_90g_dpd_24m          
+  num_tl_op_past_12m            pct_tl_nvr_dlq                percent_bc_gt_75              pub_rec_bankruptcies          tax_liens                     tot_hi_cred_lim             
+  total_bal_ex_mort             total_bc_limit                total_il_high_credit_limit    revol_bal_joint               sec_app_earliest_cr_line      sec_app_inq_last_6mths      
+  sec_app_mort_acc              sec_app_open_acc              sec_app_revol_util            sec_app_open_act_il           sec_app_num_rev_accts         sec_app_chargeoff_within_12_mths
+  sec_app_collections_12_mths_ex_med  sec_app_mths_since_last_major_derog  hardship_flag                 hardship_type                 hardship_reason               hardship_status             
+  deferral_term                 hardship_amount               hardship_start_date           hardship_end_date             payment_plan_start_date       hardship_length             
+  hardship_dpd                  hardship_loan_status          orig_projected_additional_accrued_interest  hardship_payoff_balance_amount  hardship_last_payment_amount  debt_settlement_flag        
+  debt_settlement_flag_date     settlement_status             settlement_date               settlement_amount             settlement_percentage         settlement_term             
+  filename                    
+
+===== 未知量1：各文件的年份覆盖（查有没有重叠，重叠了要按 id 去重）=====
+                来源文件  放款年     笔数
+     LoanStats3a.csv 2007    603
+     LoanStats3a.csv 2008   2393
+     LoanStats3a.csv 2009   5281
+     LoanStats3a.csv 2010  12537
+     LoanStats3a.csv 2011  21721
+     LoanStats3b.csv 2012  53367
+     LoanStats3b.csv 2013 134814
+     LoanStats3c.csv 2014 235629
+     LoanStats3d.csv 2015 421095
+LoanStats_2016Q1.csv 2016 133887
+LoanStats_2016Q2.csv 2016  97854
+LoanStats_2016Q3.csv 2016  99120
+LoanStats_2016Q4.csv 2016 103546
+LoanStats_2017Q1.csv 2017  96779
+LoanStats_2017Q2.csv 2017 105451
+LoanStats_2017Q3.csv 2017 122701
+LoanStats_2017Q4.csv 2017 118648
+LoanStats_2018Q1.csv 2018 107864
+LoanStats_2018Q2.csv 2018 130772
+LoanStats_2018Q3.csv 2018 128194
+LoanStats_2018Q4.csv 2018 128412
+
+===== 未知量2：数据快照日（整个项目的时间原点，错了全盘皆错）=====
+    征信最后拉取     最后一笔还款     最后一笔放款
+2023-07-01 2022-08-01 2018-12-01
+
+  —— 决定性证据：仍未结清的贷款，最后一笔还款落在哪个月 ——
+     （未结清的贷款一直在按月还款，它们集体停在哪个月，数据就封存在哪个月）
+     年月    笔数
+2022-08 46172
+2022-07   752
+2022-06   198
+2022-05   138
+2022-04    65
+2022-03     3
+2022-01     1
+2021-08     1
+2021-05     1
+2021-03     1
+  → 快照日取 2022-08-31（db.SNAPSHOT 已按此设定）
+
+  —— 各文件自己的最后还款月（确认没有哪个文件的封存日更晚）——
+                来源文件   最后还款月   最后放款月     笔数
+     LoanStats3a.csv 2017-04 2011-12  42535
+     LoanStats3b.csv 2019-05 2013-12 188181
+     LoanStats3c.csv 2021-04 2014-12 235629
+     LoanStats3d.csv 2022-02 2015-12 421095
+LoanStats_2016Q1.csv 2022-08 2016-03 133887
+LoanStats_2016Q2.csv 2022-07 2016-06  97854
+LoanStats_2016Q3.csv 2022-08 2016-09  99120
+LoanStats_2016Q4.csv 2022-08 2016-12 103546
+LoanStats_2017Q1.csv 2022-08 2017-03  96779
+LoanStats_2017Q2.csv 2022-08 2017-06 105451
+LoanStats_2017Q3.csv 2022-08 2017-09 122701
+LoanStats_2017Q4.csv 2022-08 2017-12 118648
+LoanStats_2018Q1.csv 2022-08 2018-03 107864
+LoanStats_2018Q2.csv 2022-08 2018-06 130772
+LoanStats_2018Q3.csv 2022-08 2018-09 128194
+LoanStats_2018Q4.csv 2022-08 2018-12 128412
+
+===== 未知量3：账务恒等式（Charged Off 的 out_prncp 是不是 0）=====
+                                                 状态      笔数    未还本金为0  未还本金大于0  平均利率
+                                         Fully Paid 1827102 1827102.0      0.0 12.53
+                                        Charged Off  382480  382480.0      0.0 15.58
+                                            Current   45555    1005.0  44550.0 14.39
+ Does not meet the credit policy. Status:Fully Paid    1988    1988.0      0.0 13.98
+                                    In Grace Period    1373       0.0   1373.0 16.53
+                                 Late (31-120 days)     985       0.0    985.0 16.06
+Does not meet the credit policy. Status:Charged Off     761     761.0      0.0 14.60
+                                  Late (16-30 days)     402       0.0    402.0 16.30
+                                            Default      22       0.0     22.0 16.69
+
+===== 未知量4：核销滞后（放款 → 最后一笔还款，隔了多少个月）=====
+ 距放款月数    笔数
+     0    15
+     1  3318
+     2  5962
+     3  7960
+     4  9763
+     5 11237
+     6 12427
+     7 13176
+     8 13807
+     9 14231
+    10 14416
+    11 15075
+    12 14901
+    13 14316
+    14 14139
+    15 13388
+    16 13212
+    17 12680
+    18 11729
+    19 11088
+    20 10781
+    21 10258
+    22 10125
+    23 10048
+    24  9548
+    25  9171
+    26  8401
+    27  8108
+    28  7916
+    29  7295
+    30  6764
+    31  6298
+    32  5828
+    33  5413
+    34  4930
+    35  4250
+    36  3283
+    37  2719
+    38  2377
+    39  2135
+    40  1757
+    41  1643
+    42  1432
+    43  1346
+    44  1229
+    45  1139
+    46  1072
+    47   993
+    48   912
+    49   785
+    50   714
+    51   739
+    52   617
+    53   520
+    54   488
+    55   426
+    56   386
+    57   330
+    58   312
+    59   220
+    60   163
+    61   127
+    62    73
+    63    56
+    64    37
+    65    17
+    66    14
+    67    14
+    68    11
+    69     5
+    70     1
+    71     1
+    72     1
+    73     1
+  → 坏账的"最后一笔还款"距放款：中位数 16 个月，90% 分位 33 个月
+  ⚠️ 这不是违约日。违约发生在最后一笔还款【之后】，真实核销滞后更长，
+     所以后面算账龄时要承认：曲线的尾部会被这个滞后系统性截短。
+
+===== 关键字段缺失率 =====
+                 字段      非空      总数  缺失率
+          loan_amnt 2260668 2260668 0.00
+        funded_amnt 2260668 2260668 0.00
+               term 2260668 2260668 0.00
+           int_rate 2260668 2260668 0.00
+        installment 2260668 2260668 0.00
+              grade 2260668 2260668 0.00
+          sub_grade 2260668 2260668 0.00
+         emp_length 2260668 2260668 0.00
+     home_ownership 2260668 2260668 0.00
+         annual_inc 2260664 2260668 0.00
+verification_status 2260668 2260668 0.00
+        loan_status 2260668 2260668 0.00
+            purpose 2260668 2260668 0.00
+         addr_state 2260668 2260668 0.00
+                dti 2258957 2260668 0.08
+        delinq_2yrs 2260639 2260668 0.00
+         revol_util 2258866 2260668 0.08
+          total_acc 2260639 2260668 0.00
+           open_acc 2260639 2260668 0.00
+            pub_rec 2260639 2260668 0.00
+           mort_acc 2210638 2260668 2.21
+        total_pymnt 2260668 2260668 0.00
+    total_rec_prncp 2260668 2260668 0.00
+         recoveries 2260668 2260668 0.00
+          out_prncp 2260668 2260668 0.00
+       last_pymnt_d 2258245 2260668 0.11
+  total_bal_ex_mort 2210638 2260668 2.21
+        tot_cur_bal 2190392 2260668 3.11
+   num_tl_120dpd_2m 2107011 2260668 6.80
+
+===== 泄漏字段自动扫描（只靠数据，不靠我手写的名单）=====
+  用 2007 年（最早）对比 2018 年（最晚）的缺失率
+
+  【档一】早年 100% 缺失、近年几乎全有 —— 放款后才产生的快照或结果：82 个
+    acc_open_past_24mths                     早年 100.0%  晚年   0.0%   已在 LEAKY
+    all_util                                 早年 100.0%  晚年   0.0%   已在 LEAKY
+    annual_inc_joint                         早年 100.0%  晚年  86.1%   ★★ LEAKY 里没有，要补
+    avg_cur_bal                              早年 100.0%  晚年   0.0%   已在 LEAKY
+    bc_open_to_buy                           早年 100.0%  晚年   1.3%   已在 LEAKY
+    bc_util                                  早年 100.0%  晚年   1.4%   已在 LEAKY
+    deferral_term                            早年 100.0%  晚年  99.6%   ★★ LEAKY 里没有，要补
+    dti_joint                                早年 100.0%  晚年  86.1%   ★★ LEAKY 里没有，要补
+    hardship_amount                          早年 100.0%  晚年  99.6%   已在 LEAKY
+    hardship_dpd                             早年 100.0%  晚年  99.6%   已在 LEAKY
+    hardship_end_date                        早年 100.0%  晚年  99.6%   已在 LEAKY
+    hardship_last_payment_amount             早年 100.0%  晚年  99.6%   已在 LEAKY
+    hardship_length                          早年 100.0%  晚年  99.6%   已在 LEAKY
+    hardship_loan_status                     早年 100.0%  晚年  99.6%   已在 LEAKY
+    hardship_payoff_balance_amount           早年 100.0%  晚年  99.6%   已在 LEAKY
+    hardship_reason                          早年 100.0%  晚年  99.6%   已在 LEAKY
+    hardship_start_date                      早年 100.0%  晚年  99.6%   已在 LEAKY
+    hardship_status                          早年 100.0%  晚年  99.6%   已在 LEAKY
+    hardship_type                            早年 100.0%  晚年  99.6%   已在 LEAKY
+    id                                       早年 100.0%  晚年 100.0%   ★★ LEAKY 里没有，要补
+    il_util                                  早年 100.0%  晚年  16.3%   已在 LEAKY
+    inq_fi                                   早年 100.0%  晚年   0.0%   已在 LEAKY
+    inq_last_12m                             早年 100.0%  晚年   0.0%   已在 LEAKY
+    max_bal_bc                               早年 100.0%  晚年   0.0%   已在 LEAKY
+    member_id                                早年 100.0%  晚年 100.0%   ★★ LEAKY 里没有，要补
+    mo_sin_old_il_acct                       早年 100.0%  晚年   3.7%   已在 LEAKY
+    mo_sin_old_rev_tl_op                     早年 100.0%  晚年   0.0%   已在 LEAKY
+    mo_sin_rcnt_rev_tl_op                    早年 100.0%  晚年   0.0%   已在 LEAKY
+    mo_sin_rcnt_tl                           早年 100.0%  晚年   0.0%   已在 LEAKY
+    mort_acc                                 早年 100.0%  晚年   0.0%   已在 LEAKY
+    mths_since_last_major_derog              早年 100.0%  晚年  76.8%   ★★ LEAKY 里没有，要补
+    mths_since_rcnt_il                       早年 100.0%  晚年   3.7%   已在 LEAKY
+    mths_since_recent_bc                     早年 100.0%  晚年   1.3%   已在 LEAKY
+    mths_since_recent_bc_dlq                 早年 100.0%  晚年  80.2%   已在 LEAKY
+    mths_since_recent_inq                    早年 100.0%  晚年  12.4%   已在 LEAKY
+    mths_since_recent_revol_delinq           早年 100.0%  晚年  71.2%   已在 LEAKY
+    num_accts_ever_120_pd                    早年 100.0%  晚年   0.0%   已在 LEAKY
+    num_actv_bc_tl                           早年 100.0%  晚年   0.0%   已在 LEAKY
+    num_actv_rev_tl                          早年 100.0%  晚年   0.0%   已在 LEAKY
+    num_bc_sats                              早年 100.0%  晚年   0.0%   已在 LEAKY
+    num_bc_tl                                早年 100.0%  晚年   0.0%   已在 LEAKY
+    num_il_tl                                早年 100.0%  晚年   0.0%   已在 LEAKY
+    num_op_rev_tl                            早年 100.0%  晚年   0.0%   已在 LEAKY
+    num_rev_accts                            早年 100.0%  晚年   0.0%   已在 LEAKY
+    num_rev_tl_bal_gt_0                      早年 100.0%  晚年   0.0%   已在 LEAKY
+    num_sats                                 早年 100.0%  晚年   0.0%   已在 LEAKY
+    num_tl_120dpd_2m                         早年 100.0%  晚年   2.5%   已在 LEAKY
+    num_tl_30dpd                             早年 100.0%  晚年   0.0%   已在 LEAKY
+    num_tl_90g_dpd_24m                       早年 100.0%  晚年   0.0%   已在 LEAKY
+    num_tl_op_past_12m                       早年 100.0%  晚年   0.0%   已在 LEAKY
+    open_acc_6m                              早年 100.0%  晚年   0.0%   已在 LEAKY
+    open_act_il                              早年 100.0%  晚年   0.0%   已在 LEAKY
+    open_il_12m                              早年 100.0%  晚年   0.0%   已在 LEAKY
+    open_il_24m                              早年 100.0%  晚年   0.0%   已在 LEAKY
+    open_rv_12m                              早年 100.0%  晚年   0.0%   已在 LEAKY
+    open_rv_24m                              早年 100.0%  晚年   0.0%   已在 LEAKY
+    orig_projected_additional_accrued_interest 早年 100.0%  晚年  99.7%   ★★ LEAKY 里没有，要补
+    payment_plan_start_date                  早年 100.0%  晚年  99.6%   ★★ LEAKY 里没有，要补
+    pct_tl_nvr_dlq                           早年 100.0%  晚年   0.0%   已在 LEAKY
+    percent_bc_gt_75                         早年 100.0%  晚年   1.3%   已在 LEAKY
+    revol_bal_joint                          早年 100.0%  晚年  86.1%   ★★ LEAKY 里没有，要补
+    sec_app_chargeoff_within_12_mths         早年 100.0%  晚年  86.1%   ★★ LEAKY 里没有，要补
+    sec_app_collections_12_mths_ex_med       早年 100.0%  晚年  86.1%   ★★ LEAKY 里没有，要补
+    sec_app_earliest_cr_line                 早年 100.0%  晚年  86.1%   ★★ LEAKY 里没有，要补
+    sec_app_inq_last_6mths                   早年 100.0%  晚年  86.1%   ★★ LEAKY 里没有，要补
+    sec_app_mort_acc                         早年 100.0%  晚年  86.1%   ★★ LEAKY 里没有，要补
+    sec_app_mths_since_last_major_derog      早年 100.0%  晚年  95.5%   ★★ LEAKY 里没有，要补
+    sec_app_num_rev_accts                    早年 100.0%  晚年  86.1%   ★★ LEAKY 里没有，要补
+    sec_app_open_acc                         早年 100.0%  晚年  86.1%   ★★ LEAKY 里没有，要补
+    sec_app_open_act_il                      早年 100.0%  晚年  86.1%   ★★ LEAKY 里没有，要补
+    sec_app_revol_util                       早年 100.0%  晚年  86.3%   ★★ LEAKY 里没有，要补
+    tot_coll_amt                             早年 100.0%  晚年   0.0%   已在 LEAKY
+    tot_cur_bal                              早年 100.0%  晚年   0.0%   已在 LEAKY
+    tot_hi_cred_lim                          早年 100.0%  晚年   0.0%   已在 LEAKY
+    total_bal_ex_mort                        早年 100.0%  晚年   0.0%   已在 LEAKY
+    total_bal_il                             早年 100.0%  晚年   0.0%   已在 LEAKY
+    total_bc_limit                           早年 100.0%  晚年   0.0%   已在 LEAKY
+    total_cu_tl                              早年 100.0%  晚年   0.0%   已在 LEAKY
+    total_il_high_credit_limit               早年 100.0%  晚年   0.0%   已在 LEAKY
+    total_rev_hi_lim                         早年 100.0%  晚年   0.0%   已在 LEAKY
+    url                                      早年 100.0%  晚年 100.0%   ★★ LEAKY 里没有，要补
+    verification_status_joint                早年 100.0%  晚年  87.1%   ★★ LEAKY 里没有，要补
+
+  【档二】早年基本缺失、近年才有 —— 不是泄漏，是当年没采集：7 个
+    debt_settlement_flag_date                早年  99.8%  晚年  98.9%   在 LEAKY
+    settlement_amount                        早年  99.8%  晚年  98.9%   在 LEAKY
+    settlement_date                          早年  99.8%  晚年  98.9%   在 LEAKY
+    settlement_percentage                    早年  99.8%  晚年  98.9%   在 LEAKY
+    settlement_status                        早年  99.8%  晚年  98.9%   在 LEAKY
+    settlement_term                          早年  99.8%  晚年  98.9%   在 LEAKY
+    pub_rec_bankruptcies                     早年  96.7%  晚年   0.0%   已在 COHORT_BLIND
+
+  ① 扫出来但我两个名单里都没有的：['annual_inc_joint', 'deferral_term', 'dti_joint', 'id', 'member_id', 'mths_since_last_major_derog', 'orig_projected_additional_accrued_interest', 'payment_plan_start_date', 'revol_bal_joint', 'sec_app_chargeoff_within_12_mths', 'sec_app_collections_12_mths_ex_med', 'sec_app_earliest_cr_line', 'sec_app_inq_last_6mths', 'sec_app_mort_acc', 'sec_app_mths_since_last_major_derog', 'sec_app_num_rev_accts', 'sec_app_open_acc', 'sec_app_open_act_il', 'sec_app_revol_util', 'url', 'verification_status_joint', 'pub_rec_bankruptcies']
+     → 逐个判断：是放款后快照（进 LEAKY），还是当年没采集（进 COHORT_BLIND）。
+       两种都不能进特征集，但理由不同，混着说等于没想清楚。
+  ② 我黑名单里写了、但数据里根本没这种前缀的：（无）
+     → 属于"多心了"，不影响正确性，可以精简掉。
+
+  完整对比已存 output/tables/leak_scan.csv
+[17:24:53] 阶段3 建分析主表 loans.parquet ...
+[17:24:59]   完成：2,260,668 行 × 58 列
+[17:24:59] 阶段4 建防泄漏特征表 loans_features.parquet ...
+[17:24:59]   ⚠️ 被"队列相关缺失"名单拦下：['pub_rec_bankruptcies']
+[17:24:59]      这几个不是泄漏，是当年压根没采集，早期队列大面积缺失。
+[17:24:59]      拿它做跨队列模型，模型会从"有没有值"里反推出"这是哪一年"，
+[17:24:59]      最后把队列信息当成了信号——原因不同，后果一样，所以同样不能用。
+[17:25:01]   完成：2,260,668 行 × 39 列（不含任何放款后字段）
+[17:25:01]   自检：39 列与"不可用字段"名单交集为空 ✅
+[17:25:01] 阶段5 摘要
+
+===== 主表概览：放款年 × 状态 =====
+ 放款年    总笔数      已结清     已核销      未决  未决占比  核销本金_百万  平均利率
+2007    603    445.0   158.0     0.0   0.0      1.6 11.83
+2008   2393   1897.0   496.0     0.0   0.0      5.0 12.06
+2009   5281   4558.0   723.0     0.0   0.0      7.6 12.44
+2010  12537  10780.0  1757.0     0.0   0.0     18.6 11.99
+2011  21721  18424.0  3297.0     0.0   0.0     43.4 12.22
+2012  53367  44723.0  8644.0     0.0   0.0    127.2 13.64
+2013 134814 113787.0 21027.0     0.0   0.0    329.9 14.53
+2014 235629 193881.0 41748.0     0.0   0.0    652.2 13.77
+2015 421095 340795.0 80300.0     0.0   0.0   1281.1 12.60
+2016 434407 353529.0 80837.0    41.0   0.0   1264.6 13.04
+2017 443579 359861.0 73800.0  9918.0   2.2   1186.6 13.24
+2018 495242 386410.0 70476.0 38356.0   7.7   1223.3 12.73
+
+  读法：未决占比逐年升高 = 右删失存在的第一证据。
+  "核销本金"是期末口径的绝对额，它在近年变小不代表质量变好，只代表没来得及坏。
+[17:25:01] 阶段 0-5 完成。

@@ -1,0 +1,320 @@
+[16:04:59] 阶段0 解压：找到 14 个 zip
+[16:04:59]   解压 LoanStats3b.csv（153.5 MB）
+[16:05:00]   解压 LoanStats3c.csv（178.2 MB）
+[16:05:01]   解压 LoanStats_2016Q1.csv（103.0 MB）
+[16:05:02]   解压 LoanStats_2016Q3.csv（76.2 MB）
+[16:05:02]   解压 LoanStats_2016Q4.csv（79.8 MB）
+[16:05:02]   解压 LoanStats_2017Q1.csv（74.6 MB）
+[16:05:05]   解压 LoanStats_2017Q2.csv（81.4 MB）
+[16:05:07]   解压 LoanStats_2017Q3.csv（94.8 MB）
+[16:05:10]   解压 LoanStats_2017Q4.csv（91.5 MB）
+[16:05:12]   解压 LoanStats_2018Q1.csv（83.2 MB）
+[16:05:17]   解压 LoanStats_2018Q2.csv（100.8 MB）
+[16:05:18]   待入库 csv：14 个
+[16:05:18] 阶段1 源文件清单变了（清单记录 vs 当前 14 个），重建 parquet
+[16:05:18] 阶段1 读 14 个 csv 落 loans_raw.parquet（全 VARCHAR）...
+[16:05:39]   完成：1,711,379 行
+
+  独立复算对账（Python csv 模块 vs DuckDB，防"丢了数据还不知道"）：
+    LoanStats3a.csv                源文件  42,542 条 − 列数不对   7 − 重复表头/空状态   0 = 有效  42,535 | parquet  42,535  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Loans that do not meet the credit policy'
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 460296150'
+        跳过：'Total amount funded in policy code 2: 0'
+    LoanStats3b.csv                源文件 188,185 条 − 列数不对   4 − 重复表头/空状态   0 = 有效 188,181 | parquet 188,181  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 2700702175'
+        跳过：'Total amount funded in policy code 2: 81866225'
+    LoanStats3c.csv                源文件 235,633 条 − 列数不对   4 − 重复表头/空状态   0 = 有效 235,629 | parquet 235,629  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 3503840175'
+        跳过：'Total amount funded in policy code 2: 873652739'
+    LoanStats_2016Q1.csv           源文件 133,891 条 − 列数不对   4 − 重复表头/空状态   0 = 有效 133,887 | parquet 133,887  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 2087217200'
+        跳过：'Total amount funded in policy code 2: 662815446'
+    LoanStats_2016Q2.csv           源文件  97,858 条 − 列数不对   4 − 重复表头/空状态   0 = 有效  97,854 | parquet  97,854  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 1443412975'
+        跳过：'Total amount funded in policy code 2: 511988838'
+    LoanStats_2016Q3.csv           源文件  99,124 条 − 列数不对   4 − 重复表头/空状态   0 = 有效  99,120 | parquet  99,120  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 1404586950'
+        跳过：'Total amount funded in policy code 2: 567415763'
+    LoanStats_2016Q4.csv           源文件 103,550 条 − 列数不对   4 − 重复表头/空状态   0 = 有效 103,546 | parquet 103,546  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 1465324575'
+        跳过：'Total amount funded in policy code 2: 521819861'
+    LoanStats_2017Q1.csv           源文件  96,783 条 − 列数不对   4 − 重复表头/空状态   0 = 有效  96,779 | parquet  96,779  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 1437969475'
+        跳过：'Total amount funded in policy code 2: 519691874'
+    LoanStats_2017Q2.csv           源文件 105,455 条 − 列数不对   4 − 重复表头/空状态   0 = 有效 105,451 | parquet 105,451  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 1538432075'
+        跳过：'Total amount funded in policy code 2: 603225638'
+    LoanStats_2017Q3.csv           源文件 122,705 条 − 列数不对   4 − 重复表头/空状态   0 = 有效 122,701 | parquet 122,701  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 1791201400'
+        跳过：'Total amount funded in policy code 2: 640990301'
+    LoanStats_2017Q4.csv           源文件 118,652 条 − 列数不对   4 − 重复表头/空状态   0 = 有效 118,648 | parquet 118,648  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 1817354125'
+        跳过：'Total amount funded in policy code 2: 592843163'
+    LoanStats_2018Q1.csv           源文件 107,868 条 − 列数不对   4 − 重复表头/空状态   0 = 有效 107,864 | parquet 107,864  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 1741781700'
+        跳过：'Total amount funded in policy code 2: 539397275'
+    LoanStats_2018Q2.csv           源文件 130,776 条 − 列数不对   4 − 重复表头/空状态   0 = 有效 130,772 | parquet 130,772  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 2080429200'
+        跳过：'Total amount funded in policy code 2: 716459212'
+    LoanStats_2018Q4.csv           源文件 128,416 条 − 列数不对   4 − 重复表头/空状态   0 = 有效 128,412 | parquet 128,412  | ✅
+        跳过：''
+        跳过：''
+        跳过：'Total amount funded in policy code 1: 2050909275'
+        跳过：'Total amount funded in policy code 2: 789378849'
+    总结论：✅ 两边完全一致，没有看不见的数据损失
+[16:06:18]   已记源文件清单 loans_raw.parquet.sources.txt（14 个文件）
+[16:06:18] 阶段2 体检
+[16:06:18]   列数 145，行数 1,711,379
+
+===== 全部列名 =====
+  id                            member_id                     loan_amnt                     funded_amnt                   funded_amnt_inv               term                        
+  int_rate                      installment                   grade                         sub_grade                     emp_title                     emp_length                  
+  home_ownership                annual_inc                    verification_status           issue_d                       loan_status                   pymnt_plan                  
+  url                           desc                          purpose                       title                         zip_code                      addr_state                  
+  dti                           delinq_2yrs                   earliest_cr_line              inq_last_6mths                mths_since_last_delinq        mths_since_last_record      
+  open_acc                      pub_rec                       revol_bal                     revol_util                    total_acc                     initial_list_status         
+  out_prncp                     out_prncp_inv                 total_pymnt                   total_pymnt_inv               total_rec_prncp               total_rec_int               
+  total_rec_late_fee            recoveries                    collection_recovery_fee       last_pymnt_d                  last_pymnt_amnt               next_pymnt_d                
+  last_credit_pull_d            collections_12_mths_ex_med    mths_since_last_major_derog   policy_code                   application_type              annual_inc_joint            
+  dti_joint                     verification_status_joint     acc_now_delinq                tot_coll_amt                  tot_cur_bal                   open_acc_6m                 
+  open_act_il                   open_il_12m                   open_il_24m                   mths_since_rcnt_il            total_bal_il                  il_util                     
+  open_rv_12m                   open_rv_24m                   max_bal_bc                    all_util                      total_rev_hi_lim              inq_fi                      
+  total_cu_tl                   inq_last_12m                  acc_open_past_24mths          avg_cur_bal                   bc_open_to_buy                bc_util                     
+  chargeoff_within_12_mths      delinq_amnt                   mo_sin_old_il_acct            mo_sin_old_rev_tl_op          mo_sin_rcnt_rev_tl_op         mo_sin_rcnt_tl              
+  mort_acc                      mths_since_recent_bc          mths_since_recent_bc_dlq      mths_since_recent_inq         mths_since_recent_revol_delinq  num_accts_ever_120_pd       
+  num_actv_bc_tl                num_actv_rev_tl               num_bc_sats                   num_bc_tl                     num_il_tl                     num_op_rev_tl               
+  num_rev_accts                 num_rev_tl_bal_gt_0           num_sats                      num_tl_120dpd_2m              num_tl_30dpd                  num_tl_90g_dpd_24m          
+  num_tl_op_past_12m            pct_tl_nvr_dlq                percent_bc_gt_75              pub_rec_bankruptcies          tax_liens                     tot_hi_cred_lim             
+  total_bal_ex_mort             total_bc_limit                total_il_high_credit_limit    revol_bal_joint               sec_app_earliest_cr_line      sec_app_inq_last_6mths      
+  sec_app_mort_acc              sec_app_open_acc              sec_app_revol_util            sec_app_open_act_il           sec_app_num_rev_accts         sec_app_chargeoff_within_12_mths
+  sec_app_collections_12_mths_ex_med  sec_app_mths_since_last_major_derog  hardship_flag                 hardship_type                 hardship_reason               hardship_status             
+  deferral_term                 hardship_amount               hardship_start_date           hardship_end_date             payment_plan_start_date       hardship_length             
+  hardship_dpd                  hardship_loan_status          orig_projected_additional_accrued_interest  hardship_payoff_balance_amount  hardship_last_payment_amount  debt_settlement_flag        
+  debt_settlement_flag_date     settlement_status             settlement_date               settlement_amount             settlement_percentage         settlement_term             
+  filename                    
+
+===== 未知量1：各文件的年份覆盖（查有没有重叠，重叠了要按 id 去重）=====
+                来源文件  放款年     笔数
+     LoanStats3a.csv 2007    603
+     LoanStats3a.csv 2008   2393
+     LoanStats3a.csv 2009   5281
+     LoanStats3a.csv 2010  12537
+     LoanStats3a.csv 2011  21721
+     LoanStats3b.csv 2012  53367
+     LoanStats3b.csv 2013 134814
+     LoanStats3c.csv 2014 235629
+LoanStats_2016Q1.csv 2016 133887
+LoanStats_2016Q2.csv 2016  97854
+LoanStats_2016Q3.csv 2016  99120
+LoanStats_2016Q4.csv 2016 103546
+LoanStats_2017Q1.csv 2017  96779
+LoanStats_2017Q2.csv 2017 105451
+LoanStats_2017Q3.csv 2017 122701
+LoanStats_2017Q4.csv 2017 118648
+LoanStats_2018Q1.csv 2018 107864
+LoanStats_2018Q2.csv 2018 130772
+LoanStats_2018Q4.csv 2018 128412
+
+===== 未知量2：数据快照日（整个项目的时间原点，错了全盘皆错）=====
+    征信最后拉取     最后一笔还款     最后一笔放款
+2023-07-01 2022-08-01 2018-12-01
+
+  —— 决定性证据：仍未结清的贷款，最后一笔还款落在哪个月 ——
+     （未结清的贷款一直在按月还款，它们集体停在哪个月，数据就封存在哪个月）
+     年月    笔数
+2022-08 36146
+2022-07   590
+2022-06   152
+2022-05   114
+2022-04    55
+2022-03     3
+2022-01     1
+2021-05     1
+2021-03     1
+  → 快照日取 2022-08-31（db.SNAPSHOT 已按此设定）
+
+  —— 各文件自己的最后还款月（确认没有哪个文件的封存日更晚）——
+                来源文件   最后还款月   最后放款月     笔数
+     LoanStats3a.csv 2017-04 2011-12  42535
+     LoanStats3b.csv 2019-05 2013-12 188181
+     LoanStats3c.csv 2021-04 2014-12 235629
+LoanStats_2016Q1.csv 2022-08 2016-03 133887
+LoanStats_2016Q2.csv 2022-07 2016-06  97854
+LoanStats_2016Q3.csv 2022-08 2016-09  99120
+LoanStats_2016Q4.csv 2022-08 2016-12 103546
+LoanStats_2017Q1.csv 2022-08 2017-03  96779
+LoanStats_2017Q2.csv 2022-08 2017-06 105451
+LoanStats_2017Q3.csv 2022-08 2017-09 122701
+LoanStats_2017Q4.csv 2022-08 2017-12 118648
+LoanStats_2018Q1.csv 2022-08 2018-03 107864
+LoanStats_2018Q2.csv 2022-08 2018-06 130772
+LoanStats_2018Q4.csv 2022-08 2018-12 128412
+
+===== 未知量3：账务恒等式（Charged Off 的 out_prncp 是不是 0）=====
+                                                 状态      笔数    未还本金为0  未还本金大于0  平均利率
+                                         Fully Paid 1385847 1385847.0      0.0 12.67
+                                        Charged Off  284823  284823.0      0.0 15.73
+                                            Current   35733     897.0  34836.0 14.39
+ Does not meet the credit policy. Status:Fully Paid    1988    1988.0      0.0 13.98
+                                    In Grace Period    1118       0.0   1118.0 16.49
+                                 Late (31-120 days)     776       0.0    776.0 16.04
+Does not meet the credit policy. Status:Charged Off     761     761.0      0.0 14.60
+                                  Late (16-30 days)     315       0.0    315.0 16.17
+                                            Default      18       0.0     18.0 16.73
+
+===== 未知量4：核销滞后（放款 → 最后一笔还款，隔了多少个月）=====
+ 距放款月数    笔数
+     0    10
+     1  2594
+     2  4634
+     3  6122
+     4  7599
+     5  8608
+     6  9530
+     7  9927
+     8 10313
+     9 10741
+    10 10710
+    11 11335
+    12 11164
+    13 10617
+    14 10447
+    15  9945
+    16  9903
+    17  9462
+    18  8657
+    19  8176
+    20  7989
+    21  7631
+    22  7411
+    23  7472
+    24  7131
+    25  6808
+    26  6240
+    27  6059
+    28  5866
+    29  5484
+    30  5041
+    31  4678
+    32  4323
+    33  3929
+    34  3567
+    35  3095
+    36  2397
+    37  1971
+    38  1676
+    39  1468
+    40  1239
+    41  1172
+    42   988
+    43   917
+    44   848
+    45   761
+    46   731
+    47   685
+    48   640
+    49   544
+    50   486
+    51   515
+    52   423
+    53   362
+    54   343
+    55   275
+    56   260
+    57   225
+    58   215
+    59   151
+    60   109
+    61    81
+    62    49
+    63    39
+    64    23
+    65    10
+    66     8
+    67    10
+    68     6
+    69     1
+    72     1
+  → 坏账的"最后一笔还款"距放款：中位数 16 个月，90% 分位 33 个月
+  ⚠️ 这不是违约日。违约发生在最后一笔还款【之后】，真实核销滞后更长，
+     所以后面算账龄时要承认：曲线的尾部会被这个滞后系统性截短。
+
+===== 关键字段缺失率 =====
+                 字段      非空      总数  缺失率
+          loan_amnt 1711379 1711379 0.00
+        funded_amnt 1711379 1711379 0.00
+               term 1711379 1711379 0.00
+           int_rate 1711379 1711379 0.00
+        installment 1711379 1711379 0.00
+              grade 1711379 1711379 0.00
+          sub_grade 1711379 1711379 0.00
+         emp_length 1711379 1711379 0.00
+     home_ownership 1711379 1711379 0.00
+         annual_inc 1711375 1711379 0.00
+verification_status 1711379 1711379 0.00
+        loan_status 1711379 1711379 0.00
+            purpose 1711379 1711379 0.00
+         addr_state 1711379 1711379 0.00
+                dti 1709977 1711379 0.08
+        delinq_2yrs 1711350 1711379 0.00
+         revol_util 1709868 1711379 0.09
+          total_acc 1711350 1711379 0.00
+           open_acc 1711350 1711379 0.00
+            pub_rec 1711350 1711379 0.00
+           mort_acc 1661349 1711379 2.92
+        total_pymnt 1711379 1711379 0.00
+    total_rec_prncp 1711379 1711379 0.00
+         recoveries 1711379 1711379 0.00
+          out_prncp 1711379 1711379 0.00
+       last_pymnt_d 1709391 1711379 0.12
+  total_bal_ex_mort 1661349 1711379 2.92
+        tot_cur_bal 1641103 1711379 4.11
+   num_tl_120dpd_2m 1580206 1711379 7.66
+
+===== 泄漏字段自动扫描（只靠数据，不靠我手写的名单）=====
+  用 2007 年（最早）对比 2018 年（最晚）的缺失率
+Traceback (most recent call last):
+  File "E:\桌面\秋招\06_旗舰项目_信贷风险分析\code\01_build_loans.py", line 345, in <module>
+    main()
+    ~~~~^^
+  File "E:\桌面\秋招\06_旗舰项目_信贷风险分析\code\01_build_loans.py", line 340, in main
+    stage2_diagnose()
+    ~~~~~~~~~~~~~~~^^
+  File "E:\桌面\秋招\06_旗舰项目_信贷风险分析\code\01_build_loans.py", line 274, in stage2_diagnose
+    stage_leak_scan(con, cols)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "E:\桌面\秋招\06_旗舰项目_信贷风险分析\code\01_build_loans.py", line 315, in stage_leak_scan
+    df = con.execute(' UNION ALL '.join(parts)).fetchdf()
+         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.ParserException: Parser Error: syntax error at or near "desc"
+
+LINE 122:                    AVG(CASE WHEN url IS NULL OR url = '' THEN...
+              ^
