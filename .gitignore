@@ -25,3 +25,5 @@ desktop.ini
 assets/
 # 在 GitHub 上只会显示成一堆源码，且与 分析文档/ 内容重复
 分析文档合集.html
+# 单个 HTML 成品：GitHub 只显示源码，不渲染，所以不入库
+output/dashboard/

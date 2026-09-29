@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-"""C6 · 用 output/tableau 的 9 张聚合表生成「五屏看板」成品。
+"""C6 · 用 output/tableau 的 9 张聚合表生成看板成品（四屏 + 一页行动建议）。
 
 设计依据：分析文档/06_看板搭建说明.md（逐屏布局、配色规则、必须标注的话）
 配色依据：code/viz.py（经过色盲安全校验的调色板）
 
 产出：
   output/dashboard/五屏看板.html          单文件、离线可看、屏 4 可点击联动
+                                          ⚠️ 这份 html 不随仓库提交（GitHub 只显示源码）
   output/charts/dashboard_1_overview.png  五张截图（命名按说明 §九）
   output/charts/dashboard_2_quality.png
   output/charts/dashboard_3_pricing.png

@@ -70,7 +70,7 @@ python code/c1_status_by_year.py
 python code/c2_vintage_curve.py
 # ... 以此类推
 
-# 6. 看板数据源（9 张 csv）+ 五屏成品
+# 6. 看板数据源（9 张 csv）
 python code/06_build_tableau_tables.py
 python code/07_build_dashboard.py
 ```
@@ -79,4 +79,4 @@ python code/07_build_dashboard.py
 没有任何一步会回头改上一步的东西，所以可以单独重跑任何一节。
 
 > 不想跑数据也完全可以：`output/` 里的 13 张结论图、9 组取数结果、
-> 9 张看板数据源，以及 `output/dashboard/五屏看板.html` 都已经随仓库提交了。
+> 9 张看板数据源已经随仓库提交。看板成品是本地用 Tableau 搭的，不入库。
