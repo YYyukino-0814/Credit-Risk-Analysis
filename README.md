@@ -58,16 +58,33 @@
 
 ## 五屏看板
 
-**放款总览 / 放款质量（Vintage）/ 定价与收益 / 风险分群 / 行动看板**
+| 屏 1 · 放款总览 | 屏 2 · 放款质量（Vintage） |
+|---|---|
+| ![放款总览](output/charts/dashboard_1_overview.png) | ![放款质量](output/charts/dashboard_2_quality.png) |
 
-| 内容 | 位置 |
+| 屏 3 · 定价与收益 | 屏 4 · 风险分群 |
+|---|---|
+| ![定价与收益](output/charts/dashboard_3_pricing.png) | ![风险分群](output/charts/dashboard_4_segments.png) |
+
+| 屏 5 · 行动看板 | |
+|---|---|
+| ![行动看板](output/charts/dashboard_5_actions.png) | 前四屏回答「发生了什么」，<br>这一屏回答「所以呢」。 |
+
+**可交互版**：[`output/dashboard/五屏看板.html`](output/dashboard/五屏看板.html)
+——点屏 4 的 IV 排名，下面的分箱违约率图会跟着换。
+
+> ⚠️ 它是单个 HTML 文件，**GitHub 只会显示源码、不会渲染**，请下载后双击在浏览器里打开。
+
+<details>
+<summary>看板是怎么做出来的</summary>
+
+| 材料 | 位置 |
 |---|---|
 | 9 张看板聚合数据源 | `output/tableau/` |
-| 逐屏搭建规格（含仪表板动作） | `分析文档/06_看板搭建说明.md` |
-| **可交互五屏成品**（点 IV 排名联动分箱图） | `output/dashboard/五屏看板.html` |
-| 五屏截图 | `output/charts/dashboard_1~5_*.png` |
+| 逐屏搭建规格 | `分析文档/06_看板搭建说明.md` |
+| 生成脚本（可重复运行） | `code/07_build_dashboard.py` |
 
-成品由 `code/07_build_dashboard.py` 从 `output/tableau/*.csv` 生成，可重复运行。
+</details>
 
 ---
 
@@ -78,7 +95,6 @@
 ├── 项目报告.md               ★ 完整报告：背景 → 数据 → 方法 → 发现 → 建议 → 局限
 ├── 00_口径与数据说明.md      口径、快照日、异常与局限声明（附录）
 ├── 分析文档\                 01..06，一节一篇（附录）
-├── 分析文档合集.html          上面几篇的合并阅读版
 ├── data\                     ★ 原始数据与 parquet 不在仓库里，见 data/README.md
 ├── sql\                      sql_01..05，DuckDB 直接跑
 ├── code\                     建库 / 统计检验 / 画图 / 看板
